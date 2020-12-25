@@ -1,0 +1,18 @@
+{
+  "lr_0.01":
+  {
+  "resnet101": "model_weights/lr_0.01/resnet101/epoch27_loss0.0011_trainacc0.991_testacc0.991.pth",
+  "resnet152": "model_weights/lr_0.01/resnet152/epoch26_loss0.0009_trainacc0.992_testacc0.990.pth",
+  "densenet161": "model_weights/lr_0.01/densenet161/epoch27_loss0.0019_trainacc0.982_testacc0.987.pth",
+  "densenet201": "model_weights/lr_0.01/densenet201/epoch26_loss0.0009_trainacc0.992_testacc0.992.pth",
+  "inception_v3": "model_weights/lr_0.01/inception_v3/epoch28_loss0.0010_trainacc0.991_testacc0.992.pth"
+  },
+  "lr_0.001":
+  {
+    "resnet101": "model_weights/lr_0.001/resnet101/epoch30_loss0.0010_trainacc0.990_testacc0.992.pth",
+    "resnet152": "model_weights/lr_0.001/resnet152/epoch29_loss0.0012_trainacc0.989_testacc0.990.pth",
+    "densenet161": "model_weights/lr_0.001/densenet161/epoch28_loss0.0011_trainacc0.990_testacc0.992.pth",
+    "densenet201": "model_weights/lr_0.001/densenet201/epoch30_loss0.0011_trainacc0.990_testacc0.991.pth",
+    "inception_v3": "model_weights/lr_0.001/inception_v3/epoch28_loss0.0010_trainacc0.991_testacc0.992.pth"
+  }
+}

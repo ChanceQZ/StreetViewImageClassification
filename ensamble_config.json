@@ -1,0 +1,6 @@
+{
+  "resnet152": "weights/epoch26_loss0.0009_trainacc0.992_testacc0.990.pth",
+  "densenet201": "weights/epoch26_loss0.0009_trainacc0.992_testacc0.992.pth",
+  "resnet101": "weights/epoch30_loss0.0010_trainacc0.990_testacc0.992.pth",
+  "densenet161": "weights/epoch28_loss0.0011_trainacc0.990_testacc0.992.pth"
+}

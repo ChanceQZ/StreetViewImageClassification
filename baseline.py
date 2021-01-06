@@ -49,7 +49,7 @@ class Model:
             n, batch_count, train_loss_sum, train_acc_sum, start = 0, 0, 0.0, 0.0, time.time()
             self.model.train()
 
-            for X, y in enumerate(train_iter):
+            for X, y in train_iter:
                 X = X.to(self.device)
                 y = y.to(self.device)
 

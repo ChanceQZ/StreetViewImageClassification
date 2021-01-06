@@ -34,7 +34,7 @@ if __name__ == "__main__":
 
     # Test ensemble model
 
-    with open('ensamble_config.json') as f:
+    with open("ensamble_config.json") as f:
         weights = json.load(f)
     model_dict = {name: TransferingModel(name, weight).model for name, weight in weights.items()}
     ensemble_model = EnsembleClassificationModel(model_dict)

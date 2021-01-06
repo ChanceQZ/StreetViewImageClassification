@@ -53,7 +53,7 @@ class TransferingModel(Model):
         # Initialize data augmenter.
         normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 
-        if 'inception' in model_name:
+        if "inception" in model_name:
             self.model.aux_logits = False
             crop_size = 299
             test_transform_size = 331
@@ -94,27 +94,27 @@ class TransferingModel(Model):
             is_plot: bool = True,
     ) -> None:
 
-        if hasattr(self.model, 'fc'):
+        if hasattr(self.model, "fc"):
             output_params = list(map(id, self.model.fc.parameters()))
             lastlyr_params = self.model.fc.parameters()
-        elif hasattr(self.model, 'classifier'):
+        elif hasattr(self.model, "classifier"):
             output_params = list(map(id, self.model.classifier.parameters()))
             lastlyr_params = self.model.classifier.parameters()
 
         feature_params = filter(lambda p: id(p) not in output_params, self.model.parameters())
 
-        if optimizer.lower() == 'sgd':
-            optimizer = optim.SGD([{'params': feature_params},
-                                   {'params': lastlyr_params, 'lr': lr * 10}],
+        if optimizer.lower() == "sgd":
+            optimizer = optim.SGD([{"params": feature_params},
+                                   {"params": lastlyr_params, "lr": lr * 10}],
                                   lr=lr, weight_decay=0.001)
-        elif optimizer.lower() == 'adam':
-            optimizer = optim.Adam([{'params': feature_params},
-                                    {'params': lastlyr_params, 'lr': lr * 10}],
+        elif optimizer.lower() == "adam":
+            optimizer = optim.Adam([{"params": feature_params},
+                                    {"params": lastlyr_params, "lr": lr * 10}],
                                    lr=lr, weight_decay=0.001)
 
         if (train_data_path is None and validation_data_path is None) \
                 and (train_iter is None and validation_iter is None):
-            raise InvalidArguments('Training/validation data path or generator must be provided!')
+            raise InvalidArguments("Training/validation data path or generator must be provided!")
 
         if train_data_path and validation_data_path:
             # Create image folder
@@ -137,8 +137,3 @@ class TransferingModel(Model):
             model_save_path,
             is_plot
         )
-
-
-    def predict(self, X: torch.Tensor) -> list:
-        X = self.test_augs(X)
-        return super().predict(X)

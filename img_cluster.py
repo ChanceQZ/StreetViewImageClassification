@@ -58,8 +58,8 @@ def get_data(path, center_cropping=True, normalization=True):
     return np.array(img_data)
 
 
-if __name__ == '__main__':
-    sb_crop = 'Data/SoundBarrier_old/SB_Crop'
+if __name__ == "__main__":
+    sb_crop = "Data/SoundBarrier_old/SB_Crop"
     img_data = get_data(sb_crop, center_cropping=False, normalization=False)
     print(img_data.shape)
 
@@ -68,7 +68,7 @@ if __name__ == '__main__':
     print(pca_img_data.shape)
 
     n, labels = get_best_cluster(pca_img_data, 5, 8)
-    print('the best cluster number: %d' % n)
+    print("the best cluster number: %d" % n)
     print(labels)
 
     imgs = []

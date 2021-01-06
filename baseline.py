@@ -13,22 +13,21 @@ from torch import nn, optim
 from typing import Generator, Union
 from utils import check_device, plot_curve, calculate_classification_score, InvalidArguments
 
-
 class Model:
     def __init__(self, model: nn.Module, device: str = "gpu") -> None:
         self.model = model
         self.device = check_device(device)
 
     def fit(
-        self,
-        train_iter: Generator,
-        validation_iter: Generator,
-        lr: float = 0.01,
-        loss_criterion: Union[str, nn.Module] = "cross_entropy",
-        optimizer: Union[str, optim.Optimizer] = "sgd",
-        num_epochs: int = 30,
-        model_save_path: str = None,
-        is_plot: bool = False
+            self,
+            train_iter: Generator,
+            validation_iter: Generator,
+            lr: float = 0.01,
+            loss_criterion: Union[str, nn.Module] = "cross_entropy",
+            optimizer: Union[str, optim.Optimizer] = "sgd",
+            num_epochs: int = 30,
+            model_save_path: str = None,
+            is_plot: bool = False
     ) -> None:
         print("training on %s" % self.device)
         self.model = self.model.to(self.device)
@@ -48,8 +47,9 @@ class Model:
 
         for epoch in range(num_epochs):
             n, batch_count, train_loss_sum, train_acc_sum, start = 0, 0, 0.0, 0.0, time.time()
+            self.model.train()
 
-            for X, y in train_iter:
+            for X, y in enumerate(train_iter):
                 X = X.to(self.device)
                 y = y.to(self.device)
 
@@ -65,7 +65,7 @@ class Model:
 
                 batch_count += 1
                 n += y.shape[0]
-            valid_acc = self.evaluation(validation_iter)["Accuracy"]
+            valid_acc = self.evaluation(validation_iter, "Accuracy")
 
             train_acc_list.append(train_acc_sum / n)
             valid_acc_list.append(valid_acc)
@@ -101,9 +101,9 @@ class Model:
         with torch.no_grad():
             return self.model(X).argmax(dim=1).cpu().tolist()
 
-    def evaluation(self, test_iter: Generator) -> dict:
+    def evaluation(self, test_iter: Generator, score: str) -> dict:
         y_true, y_pred = [], []
         for X, y in test_iter:
             y_true.extend(y.tolist())
             y_pred.extend(self.predict(X))
-        return calculate_classification_score(y_true, y_pred)
+        return calculate_classification_score(y_true, y_pred, score)

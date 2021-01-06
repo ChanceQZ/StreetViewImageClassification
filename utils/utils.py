@@ -27,69 +27,69 @@ from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_sc
 
 
 def get_coords_from_label(label_file):
-    '''
+    """
     Get coordinates of bounding box from label. Only support (.xml) file generated from Labelimg.
     :param label_file: (.xml) file generated from Labelimg
     :return: Coordinate tuple.
-    '''
+    """
     tree = ET.parse(open(label_file))
     root = tree.getroot()
     coords = []
-    for obj in root.iter('object'):
-        xmlbox = obj.find('bndbox')
-        xmin, ymin, xmax, ymax = (int(xmlbox.find('xmin').text),
-                                  int(xmlbox.find('ymin').text),
-                                  int(xmlbox.find('xmax').text),
-                                  int(xmlbox.find('ymax').text))
+    for obj in root.iter("object"):
+        xmlbox = obj.find("bndbox")
+        xmin, ymin, xmax, ymax = (int(xmlbox.find("xmin").text),
+                                  int(xmlbox.find("ymin").text),
+                                  int(xmlbox.find("xmax").text),
+                                  int(xmlbox.find("ymax").text))
         coords.append((xmin, ymin, xmax, ymax))
     return coords
 
 
 def crop_img(img_path, lbl_path, output_path):
-    '''
+    """
     Crop image by labeling file, which contains the top-left and low-right coordinates.
     :param img_path: The path of origin image files.
     :param lbl_path: The path of label files.
-                        (*.txt, contained the top-left and low-right coordinates, sep=' ')
+                        (*.txt, contained the top-left and low-right coordinates, sep=" ")
     :param output_path: The path of images cropped.
     :return: None
-    '''
+    """
     img_file_list = os.listdir(img_path)
     lbl_file_list = os.listdir(lbl_path)
 
-    img_endswith = img_file_list[0].split('.')[-1]
+    img_endswith = img_file_list[0].split(".")[-1]
     cnt = 1
     for lbl_file in lbl_file_list:
         coords = get_coords_from_label(os.path.join(lbl_path, lbl_file))
         for coord in coords:
             xmin, ymin, xmax, ymax = coord
 
-            img = cv2.imread(os.path.join(img_path, lbl_file.replace('xml', img_endswith)))
+            img = cv2.imread(os.path.join(img_path, lbl_file.replace("xml", img_endswith)))
             cropped = img[ymin:ymax, xmin:xmax]
 
-            output_file = os.path.join(output_path, '{}.{}'.format(cnt, img_endswith))
+            output_file = os.path.join(output_path, "{}.{}".format(cnt, img_endswith))
             cv2.imwrite(output_file, cropped)
             cnt += 1
 
 
 def normalize_img(img):
-    '''
+    """
     Normalize image based on z-score.
     :param img:  Numpy ndarray type.
     :return:  Numpy ndarray type.
-    '''
+    """
     channel_mean = img.mean(axis=0, keepdims=True).mean(axis=1, keepdims=True)
     channel_std = img.std(axis=0, keepdims=True).mean(axis=1, keepdims=True)
     return (img - channel_mean) / channel_std
 
 
 def center_crop_img(img, size=100):
-    '''
+    """
     Crop image on the center.
     :param img: Numpy ndarray type.
     :param size: int
     :return: Numpy ndarray type.
-    '''
+    """
     if img.shape[0] < size or img.shape[1] < size:
         return
     center_x, center_y = img.shape[1] // 2, img.shape[0] // 2
@@ -101,19 +101,19 @@ def center_crop_img(img, size=100):
 
 
 def evaluate_accuracy(data_iter, net, device=None):
-    '''
+    """
     Evaluate test_total dataset accuracy.
     :param data_iter: data generator, containing X and y with batch size
     :param net: model
     :param device: if the device is not assigned, will use the device of net
     :return: the test_total dataset accuracy
-    '''
+    """
     if device is None and isinstance(net, torch.nn.Module):
         device = list(net.parameters())[0].device
     acc_sum, n = 0.0, 0
     with torch.no_grad():
         for X, y in data_iter:
-            net.eval()  # it's necessary to trigger to evaluation mode
+            net.eval()  # it"s necessary to trigger to evaluation mode
             y_hat = net(X.to(device)).argmax(dim=1)
             acc_sum += (y_hat == y.to(device)).float().sum().cpu().item()
             net.train()  # trigger to training mode
@@ -132,13 +132,15 @@ def check_device(device):
         return torch.device("cpu")
 
 
-def calculate_classification_score(y_true, y_pred):
-    return {
-        "Accuracy": accuracy_score(y_true, y_pred),
-        "Precision": precision_score(y_true, y_pred),
-        "Recall": recall_score(y_true, y_pred),
-        "F1_score": f1_score(y_true, y_pred),
-    }
+def calculate_classification_score(y_true, y_pred, score):
+    if score.lower() == "accuracy":
+        return accuracy_score(y_true, y_pred)
+    elif score.lower() == "precision":
+        return precision_score(y_true, y_pred)
+    elif score.lower() == "recall":
+        return recall_score(y_true, y_pred)
+    elif score.lower() == "f1_score":
+        return f1_score(y_true, y_pred)
 
 
 def plot_curve(arr1, arr2, label1, label2, xlabel, ylabel, **kwargs):
@@ -203,9 +205,9 @@ def multi_processing_copyfile(
     print("Time total cost is %.3f" % (time.time() - start))
 
 
-if __name__ == '__main__':
-    img_path = '../Data/SoundBarrier_old/img'
-    lbl_path = '../Data/SoundBarrier_old/label_xml'
-    output_path = '../Data/SoundBarrier_old/SB_Crop'
+if __name__ == "__main__":
+    img_path = "../Data/SoundBarrier_old/img"
+    lbl_path = "../Data/SoundBarrier_old/label_xml"
+    output_path = "../Data/SoundBarrier_old/SB_Crop"
 
     crop_img(img_path, lbl_path, output_path)

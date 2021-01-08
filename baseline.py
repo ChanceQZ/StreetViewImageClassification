@@ -26,6 +26,7 @@ class Model:
             loss_criterion: Union[str, nn.Module] = "cross_entropy",
             optimizer: Union[str, optim.Optimizer] = "sgd",
             num_epochs: int = 30,
+            checkpoint_epochs: int = None,
             model_save_path: str = None,
             is_plot: bool = False
     ) -> None:
@@ -45,7 +46,9 @@ class Model:
 
         train_acc_list, valid_acc_list = [], []
 
-        for epoch in range(num_epochs):
+        # If checkpoint_epochs is not None, it means that model will continue to train from last weights.
+        epoch_iter = range(num_epochs, num_epochs + checkpoint_epochs) if checkpoint_epochs else range(num_epochs)
+        for epoch in epoch_iter:
             n, batch_count, train_loss_sum, train_acc_sum, start = 0, 0, 0.0, 0.0, time.time()
             self.model.train()
 

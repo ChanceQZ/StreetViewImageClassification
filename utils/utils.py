@@ -2,7 +2,7 @@
 
 """
 @File: utils.py
-@Author: Chance
+@Author: Chance (Qian Zhen)
 @Description: This is utility package contained some useful functions or classes.
 @Date: 2020/12/7
 """
@@ -199,7 +199,7 @@ def multi_processing_copyfile(
     q = Manager().Queue()
 
     if not os.path.exists(dst_path):
-        os.mkdir(dst_path)
+        os.makedirs(dst_path)
 
     for src in src_file_list:
         dst = os.path.join(dst_path, os.path.basename(src))
@@ -209,7 +209,7 @@ def multi_processing_copyfile(
     pool.close()
     pool.join()
 
-    print("Time total cost is %.3f" % (time.time() - start))
+    print("Time total cost of copyfile is %.3f" % (time.time() - start))
 
 
 if __name__ == "__main__":

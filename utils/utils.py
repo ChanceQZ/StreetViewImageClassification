@@ -141,6 +141,13 @@ def calculate_classification_score(y_true, y_pred, score):
         return recall_score(y_true, y_pred)
     elif score.lower() == "f1_score":
         return f1_score(y_true, y_pred)
+    elif score.lower() == "all":
+        return {
+            "accuracy": accuracy_score(y_true, y_pred),
+            "recall": recall_score(y_true, y_pred),
+            "precision": precision_score(y_true, y_pred),
+            "f1_score": f1_score(y_true, y_pred)
+        }
 
 
 def plot_curve(arr1, arr2, label1, label2, xlabel, ylabel, **kwargs):

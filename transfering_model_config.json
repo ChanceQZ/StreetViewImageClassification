@@ -1,18 +1,16 @@
 {
-  "lr_0.01":
-  {
-  "resnet101": "model_weights/lr_0.01/resnet101/epoch27_loss0.0011_trainacc0.991_testacc0.991.pth",
-  "resnet152": "model_weights/lr_0.01/resnet152/epoch26_loss0.0009_trainacc0.992_testacc0.990.pth",
-  "densenet161": "model_weights/lr_0.01/densenet161/epoch27_loss0.0019_trainacc0.982_testacc0.987.pth",
-  "densenet201": "model_weights/lr_0.01/densenet201/epoch26_loss0.0009_trainacc0.992_testacc0.992.pth",
-  "inception_v3": "model_weights/lr_0.01/inception_v3/epoch28_loss0.0010_trainacc0.991_testacc0.992.pth"
-  },
   "lr_0.001":
   {
-    "resnet101": "model_weights/lr_0.001/resnet101/epoch30_loss0.0010_trainacc0.990_testacc0.992.pth",
-    "resnet152": "model_weights/lr_0.001/resnet152/epoch29_loss0.0012_trainacc0.989_testacc0.990.pth",
-    "densenet161": "model_weights/lr_0.001/densenet161/epoch28_loss0.0011_trainacc0.990_testacc0.992.pth",
-    "densenet201": "model_weights/lr_0.001/densenet201/epoch30_loss0.0011_trainacc0.990_testacc0.991.pth",
-    "inception_v3": "model_weights/lr_0.001/inception_v3/epoch28_loss0.0010_trainacc0.991_testacc0.992.pth"
+  "resnet101": "E:/Model_weights/model_weights/lr_0.001/resnet101/epoch64_loss0.0288_trainacc0.990_validacc0.985.pth",
+  "resnet152": "E:/Model_weights/model_weights/lr_0.001/resnet152/epoch67_loss0.0299_trainacc0.990_validacc0.986.pth",
+  "densenet161": "E:/Model_weights/model_weights/lr_0.001/densenet161/epoch64_loss0.0273_trainacc0.990_validacc0.986.pth",
+  "densenet201": "E:/Model_weights/model_weights/lr_0.001/densenet201/epoch70_loss0.0306_trainacc0.989_validacc0.985.pth"
+  },
+  "lr_0.0001":
+  {
+    "resnet101": "E:/Model_weights/model_weights/lr_0.0001/resnet101/epoch100_loss0.0958_trainacc0.967_validacc0.981.pth",
+    "resnet152": "E:/Model_weights/model_weights/lr_0.0001/resnet152/epoch87_loss0.1051_trainacc0.965_validacc0.973.pth",
+    "densenet161": "E:/Model_weights/model_weights/lr_0.0001/densenet161/epoch100_loss0.0950_trainacc0.968_validacc0.979.pth",
+    "densenet201": "E:/Model_weights/model_weights/lr_0.0001/densenet201/epoch93_loss0.1033_trainacc0.966_validacc0.983.pth"
   }
 }

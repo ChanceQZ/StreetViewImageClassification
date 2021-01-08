@@ -86,6 +86,7 @@ class TransferingModel(Model):
             batch_size: int = 16,
             optimizer: str = "sgd",
             num_epochs: int = 30,
+            checkpoint_epochs: int = None,
             train_data_path: str = None,
             validation_data_path: str = None,
             train_iter: Generator = None,
@@ -134,6 +135,7 @@ class TransferingModel(Model):
             loss_criterion,
             optimizer,
             num_epochs,
+            checkpoint_epochs,
             model_save_path,
             is_plot
         )

@@ -13,7 +13,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from utils import plot_curve
 
-weight_path = "model_weights/adam_lr_0.001/resnet101"
+weight_path = "E:/Model_weights/model_weights/lr_0.001/resnet101"
 weight_list = os.listdir(weight_path)
 weight_list.sort(key=lambda x: int(x.split("_")[0][5:]))
 train_acc_list, test_acc_list = [], []
@@ -33,10 +33,3 @@ plot_curve(
     "Accuracy",
     title=weight_path.split("/")[-2] + "_" + weight_path.split("/")[-1]
 )
-plt.plot(train_acc_list, label="Training accuracy")
-plt.plot(test_acc_list, label="Test accuracy")
-plt.xlabel("Epoch")
-plt.ylabel("Accuracy")
-plt.title(weight_path.split("/")[-2] + "_" + weight_path.split("/")[-1], fontsize=15)
-plt.legend()
-plt.show()

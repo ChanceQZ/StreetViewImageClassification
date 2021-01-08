@@ -1,6 +1,10 @@
 {
-  "resnet152": "weights/epoch26_loss0.0009_trainacc0.992_testacc0.990.pth",
-  "densenet201": "weights/epoch26_loss0.0009_trainacc0.992_testacc0.992.pth",
-  "resnet101": "weights/epoch30_loss0.0010_trainacc0.990_testacc0.992.pth",
-  "densenet161": "weights/epoch28_loss0.0011_trainacc0.990_testacc0.992.pth"
+  "resnet101_lr0.0001": "E:/Model_weights/model_weights/lr_0.0001/resnet101/epoch100_loss0.0958_trainacc0.967_validacc0.981.pth",
+  "resnet152_lr0.0001": "E:/Model_weights/model_weights/lr_0.0001/resnet152/epoch87_loss0.1051_trainacc0.965_validacc0.973.pth",
+  "densenet161_lr0.0001": "E:/Model_weights/model_weights/lr_0.0001/densenet161/epoch100_loss0.0950_trainacc0.968_validacc0.979.pth",
+  "densenet201_lr0.0001": "E:/Model_weights/model_weights/lr_0.0001/densenet201/epoch93_loss0.1033_trainacc0.966_validacc0.983.pth",
+  "resnet101_lr0.001": "E:/Model_weights/model_weights/lr_0.001/resnet101/epoch64_loss0.0288_trainacc0.990_validacc0.985.pth",
+  "resnet152_lr0.001": "E:/Model_weights/model_weights/lr_0.001/resnet152/epoch67_loss0.0299_trainacc0.990_validacc0.986.pth",
+  "densenet161_lr0.001": "E:/Model_weights/model_weights/lr_0.001/densenet161/epoch64_loss0.0273_trainacc0.990_validacc0.986.pth",
+  "densenet201_lr0.001": "E:/Model_weights/model_weights/lr_0.001/densenet201/epoch70_loss0.0306_trainacc0.989_validacc0.985.pth"
 }

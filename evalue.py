@@ -42,6 +42,7 @@ def batch_evaluation(model, test_data_path_list):
         test_image_folder = ImageFolder(test_data_path, transform=test_augs)
         test_iter = DataLoader(test_image_folder, 256)
         result_dict = model.evaluation(test_iter, "all")
+        print(result_dict)
         temp.append(list(result_dict.values()))
     temp = np.array(temp)
     for i, score in enumerate(result_dict.keys()):

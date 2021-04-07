@@ -12,6 +12,8 @@ import torch
 from torch import nn, optim
 from typing import Generator, Union
 from utils import check_device, plot_curve, calculate_classification_score, InvalidArguments
+from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts
+
 
 class Model:
     def __init__(self, model: nn.Module, device: str = "gpu") -> None:
@@ -44,6 +46,8 @@ class Model:
             if optimizer.lower() == "sgd":
                 optimizer = optim.SGD(self.model.parameters(), lr=lr, weight_decay=0.001)
 
+        # Learning rate scheduler
+        scheduler = CosineAnnealingWarmRestarts(optimizer, T_0=10, T_mult=2)
         train_acc_list, valid_acc_list = [], []
 
         # If checkpoint_epochs is not None, it means that model will continue to train from last weights.
@@ -52,7 +56,7 @@ class Model:
             n, batch_count, train_loss_sum, train_acc_sum, start = 0, 0, 0.0, 0.0, time.time()
             self.model.train()
 
-            for X, y in train_iter:
+            for idx, (X, y) in enumerate(train_iter):
                 X = X.to(self.device)
                 y = y.to(self.device)
 
@@ -62,18 +66,19 @@ class Model:
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
+                scheduler.step(epoch + idx / len(train_iter))
 
                 train_loss_sum += loss.cpu().item()
                 train_acc_sum += (y_pred.argmax(dim=1).cpu() == y.cpu()).sum()
 
                 batch_count += 1
                 n += y.shape[0]
-            valid_acc = self.evaluation(validation_iter, "Accuracy")
+            valid_acc, valid_loss = self.evaluation(validation_iter, "Accuracy")
 
             train_acc_list.append(train_acc_sum / n)
             valid_acc_list.append(valid_acc)
-            print("epoch %d, loss %.4f, train acc %.3f, valid_total acc %.3f, time %.1f sec"
-                  % (epoch + 1, train_loss_sum / batch_count, train_acc_sum / n, valid_acc, time.time() - start))
+            print("epoch %d, train_loss %.4f, valid_loss %.4f, train acc %.3f, valid_total acc %.3f, time %.1f sec"
+                  % (epoch + 1, train_loss_sum / batch_count, valid_loss, train_acc_sum / n, valid_acc, time.time() - start))
 
             if model_save_path:
                 torch.save(
@@ -104,9 +109,15 @@ class Model:
         with torch.no_grad():
             return self.model(X).argmax(dim=1).cpu().tolist()
 
-    def evaluation(self, test_iter: Generator, score: str) -> dict:
+    def evaluation(self, test_iter: Generator, score: str, loss_criterion=None):
         y_true, y_pred = [], []
         for X, y in test_iter:
             y_true.extend(y.tolist())
             y_pred.extend(self.predict(X))
-        return calculate_classification_score(y_true, y_pred, score)
+
+        score = calculate_classification_score(y_true, y_pred, score)
+
+        if loss_criterion:
+            loss = loss_criterion(y_pred, y_true)
+            return score, loss
+        return score

@@ -9,7 +9,7 @@
 import torch
 from torch import nn, Tensor
 from torchvision import transforms
-from baseline import Model
+from base_model import Model
 from utils import check_device
 
 

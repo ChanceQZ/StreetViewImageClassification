@@ -4,7 +4,7 @@
 @File: utils.py
 @Author: Chance (Qian Zhen)
 @Description: This is utility package contained some useful functions or classes.
-@Date: 2020/12/7
+@Date: 2020/12/07
 """
 import os
 import glob
@@ -100,33 +100,12 @@ def center_crop_img(img, size=100):
         return img[:size, :size]
 
 
-def evaluate_accuracy(data_iter, net, device=None):
-    """
-    Evaluate test_total dataset accuracy.
-    :param data_iter: data generator, containing X and y with batch size
-    :param net: model
-    :param device: if the device is not assigned, will use the device of net
-    :return: the test_total dataset accuracy
-    """
-    if device is None and isinstance(net, torch.nn.Module):
-        device = list(net.parameters())[0].device
-    acc_sum, n = 0.0, 0
-    with torch.no_grad():
-        for X, y in data_iter:
-            net.eval()  # it"s necessary to trigger to evaluation mode
-            y_hat = net(X.to(device)).argmax(dim=1)
-            acc_sum += (y_hat == y.to(device)).float().sum().cpu().item()
-            net.train()  # trigger to training mode
-            n += y.shape[0]
-    return acc_sum / n
-
-
 class InvalidArguments(Exception):
     pass
 
 
 def check_device(device):
-    if (device == "gpu" or device == "cuda") and torch.cuda.is_available():
+    if (device.lower() == "gpu" or device.lower() == "cuda") and torch.cuda.is_available():
         return torch.device("cuda")
     else:
         return torch.device("cpu")
@@ -214,6 +193,7 @@ def multi_processing_copyfile(
     pool.join()
 
     print("Time total cost of copyfile is %.3f" % (time.time() - start))
+
 
 
 if __name__ == "__main__":

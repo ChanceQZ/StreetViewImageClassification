@@ -21,7 +21,7 @@ from torch.utils.data import DataLoader
 
 def predict(file_list):
     predict_dataset = PredictDataset(file_list)
-    data_loader = DataLoader(predict_dataset, batch_size=350, num_workers=12, pin_memory=True)
+    data_loader = DataLoader(predict_dataset, batch_size=300, num_workers=12, pin_memory=True)
     predict_list = []
     with torch.no_grad():
         for data in tqdm(data_loader):
@@ -31,8 +31,9 @@ def predict(file_list):
 
 if __name__ == "__main__":
     ensamble_config = "ensamble_config.json"
-    src_folder = "C:/multi_temporal"
-    dst_folder = "C:/multi_temporal/predict"
+    src_folder = r"C:\声屏障标注20210330\Label_2nd\Class6_4"
+    pos_dst_folder = r"C:\声屏障标注20210330\Label_2nd\Class6_4\positive"
+    neg_dst_folder = r"C:\声屏障标注20210330\Label_2nd\Class6_4\negative"
 
     print("Creating ensamble model")
 
@@ -40,18 +41,22 @@ if __name__ == "__main__":
         weights = json.load(f)
     model_dict = {name: TransferingModel(name.split("_")[0], weight).model for name, weight in weights.items()}
     ensemble_model = EnsembleClassificationModel(model_dict)
-    cities = ["img"]
-    for city in cities:
-        start = time.time()
-        print("Identifying {} street view images".format(city))
-        file_list = glob.glob(os.path.join(src_folder, city, "*.png"))
-        dst_path = os.path.join(dst_folder, city)
-        if not os.path.exists(dst_path):
-            os.makedirs(dst_path)
 
-        predict_list = predict(file_list)
-        noise_barrier_list = [file for flag, file in zip(predict_list, file_list) if flag == 1]
-        multi_processing_copyfile(noise_barrier_list, dst_path)
-        torch.cuda.empty_cache()
+    start = time.time()
+    file_list = glob.glob(os.path.join(src_folder, "*.png"))
+    if not os.path.exists(pos_dst_folder):
+        os.makedirs(pos_dst_folder)
 
-        print("Time cost of {} is {}".format(city, time.time() - start))
+    if not os.path.exists(neg_dst_folder):
+        os.makedirs(neg_dst_folder)
+
+    predict_list = predict(file_list)
+    pos_noise_barrier_list = [file for flag, file in zip(predict_list, file_list) if flag == 1]
+    multi_processing_copyfile(pos_noise_barrier_list, pos_dst_folder)
+
+    neg_noise_barrier_list = [file for flag, file in zip(predict_list, file_list) if flag == 0]
+    multi_processing_copyfile(neg_noise_barrier_list, neg_dst_folder)
+
+    torch.cuda.empty_cache()
+
+    print("Time cost is {}".format(time.time() - start))

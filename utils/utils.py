@@ -168,6 +168,10 @@ preprocess = transforms.Compose([
     normalize
 ])
 
+TTA_transform = transforms.Compose([
+
+])
+
 
 def default_loader(path):
     img_pil = Image.open(path)

@@ -40,9 +40,9 @@ def batch_evaluation(model, test_data_path_list):
     temp = []
     for test_data_path in test_data_path_list:
         test_image_folder = ImageFolder(test_data_path, transform=test_augs)
-        test_iter = DataLoader(test_image_folder, 256)
-        result_dict = model.evaluation(test_iter, "all")
-        print(result_dict)
+        test_iter = DataLoader(test_image_folder, 128)
+        result_dict = model.evaluation(test_iter, "all", None, True)
+        # print(result_dict)
         temp.append(list(result_dict.values()))
     temp = np.array(temp)
     for i, score in enumerate(result_dict.keys()):
@@ -51,12 +51,17 @@ def batch_evaluation(model, test_data_path_list):
 
 if __name__ == '__main__':
     import time
-    with open('ensamble_config.json') as f:
+    # for config in glob.glob(r"C:\Level4Project\SuZhouTest\model_weights\ensemble_config\*.json"):
+    #     print(os.path.basename(config))
+    config = r"C:\Level4Project\SuZhouTest\model_weights\ensemble_config\多模型集成_0.01.json"
+    with open(config) as f:
         weights = json.load(f)
     test_data_path_list = glob.glob('data/test_total/*')
-
+    #
     model_dict = {name: TransferingModel(name.split("_")[0], weight).model for name, weight in weights.items()}
     start = time.time()
     ensemble_model = EnsembleClassificationModel(model_dict)
+    # base_path = r"C:\Level4Project\SuZhouTest\model_weights\\cosineannealing\lr_0.01"
+    # model = TransferingModel("resnet152", os.path.join(base_path, "resnet152\epoch58_loss0.0149_trainacc0.995_validacc0.996.pth"))
     batch_evaluation(ensemble_model, test_data_path_list)
     print(time.time() - start)

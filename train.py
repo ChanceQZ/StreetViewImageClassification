@@ -16,10 +16,10 @@ if __name__ == "__main__":
     validation_data_path = "C:/Level4Project/SuZhouTest/split/validation"
     model_names = ["resnet101", "resnet152", "densenet161", "densenet201"]
     optimizer = "sgd"
-    for lr in [0.1, 0.01, 0.001]:
+    for lr in [0.1, 0.001]:
         for model_name in model_names:
             print("============%s is training============" % model_name)
-            model_save_path = os.path.join("C:/Level4Project/SuZhouTest/model_weights/cosineannealing", "lr_{}".format(lr), model_name)
+            model_save_path = os.path.join("C:/Level4Project/SuZhouTest/model_weights/naive", "lr_{}".format(lr), model_name)
             if not os.path.exists(model_save_path):
                 os.makedirs(model_save_path)
             # load pretrained model
@@ -29,10 +29,10 @@ if __name__ == "__main__":
                 lr=lr,
                 batch_size=16,
                 optimizer=optimizer,
-                num_epochs=60,
+                num_epochs=30,
                 checkpoint_epochs=None,
                 train_data_path=train_data_path,
                 validation_data_path=validation_data_path,
                 model_save_path=model_save_path,
-                is_plot=True
+                is_plot=False
             )

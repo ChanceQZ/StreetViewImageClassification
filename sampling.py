@@ -106,31 +106,33 @@ def main(X, y):
     ds = DataSplit(X, y)
 
     # writing training sampling data
-    with open("./data/training_sampling.txt", "w") as f:
-        for train in ds.training_sampling:
-            f.write(train)
-            f.write("\n")
+    # with open("./data/training_sampling.txt", "w") as f:
+    #     for train in ds.training_sampling:
+    #         f.write(train)
+    #         f.write("\n")
+    train_df = pd.read_csv("./data/image_label.csv").iloc[ds._training_sampling_idx]
+    train_df.to_csv("./data/training_sampling.csv", index=None)
 
     # writing validation data
-    for idx, validation_set in enumerate(ds.validation_sampling_list):
-        with open("./data/validation_set/validation_%d.txt" % idx, "w") as f:
-            for validation_img in validation_set:
-                f.write(validation_img)
-                f.write("\n")
+    # for idx, validation_set in enumerate(ds.validation_sampling_list, start=1):
+    #     with open("./data/validation_set/validation_%d.txt" % idx, "w") as f:
+    #         for validation_img in validation_set:
+    #             f.write(validation_img)
+    #             f.write("\n")
 
     # writing test data
-    for idx, test_set in enumerate(ds.test_sampling_list):
-        with open("./data/test_set/test_%d.txt" % idx, "w") as f:
-            for test_img in test_set:
-                f.write(test_img)
-                f.write("\n")
+    # for idx, test_set in enumerate(ds.test_sampling_list, start=1):
+    #     with open("./data/test_set/test_%d.txt" % idx, "w") as f:
+    #         for test_img in test_set:
+    #             f.write(test_img)
+    #             f.write("\n")
 
 
 if __name__ == "__main__":
     city_label = pd.read_csv("./data/city_label.csv")
     image_city = pd.read_csv("./data/image_city.csv")
     image_label = pd.merge(city_label, image_city, on="name")
-    # image_label[["name", "label", "img_path"]].to_csv("image_label.csv", index=None)
+    image_label[["name", "label", "img_path"]].to_csv("./data/image_label.csv", index=None)
     X = image_label["img_path"].values
     y = image_label["label"].values
 

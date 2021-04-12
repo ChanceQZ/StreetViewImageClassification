@@ -123,47 +123,53 @@ class BaseModel:
                 "Accuracy"
             )
 
-    def predict(self, X: torch.Tensor) -> list:
-        self.model = self.model.to(self.device)
-        X = X.to(self.device)
-        self.model.eval()
-
-        with torch.no_grad():
-            return self.model(X).argmax(dim=1).cpu().tolist()
-
+    @torch.no_grad()
     def evaluation(
             self, eval_iter: Generator,
             score: str,
-            TTA=False
+            TTA_mode=False
     ):
+        """
+        evaluation
+        :param eval_iter:
+        :param score:
+        :param TTA_mode: if TTA mode is turned on, loss critirion
+        :return: benchmarks(acc, recall, precision and f1) [TTA mode], or benchmarks and loss
+        """
+        self.model.eval()
+
         y_true_list, y_pred_list = [], []
         eval_loss_sum = 0
         sample_count = 0
         # TTA condition
-        if TTA:
+        if TTA_mode:
             # each data group has n groups data which are augmented by TTA
             for data_group in eval_iter:
                 y_pred_voting_list = []
                 # each data item has X and y (data and label)
                 for data_item in data_group:
-                    X, y = data_item
-                    y_pred = self.predict(X)
+                    X = data_item[0]
+
+                    y_pred = self.model(X.to(self.device)).argmax(dim=1).cpu().tolist()  # map probability into category
                     y_pred_voting_list.append(y_pred)
-                y_true_list.extend(y.tolist())
+                y_true = data_group[0][1]
+                y_true_list.extend(y_true.tolist())
                 # calculate mode based on prediction of different groups
                 y_pred_list.extend(list(stats.mode(y_pred_voting_list)[0][0]))
+
+            score = calculate_classification_score(y_true_list, y_pred_list, score)
+            return score
+
         else:
             for X, y in eval_iter:
-                # TODO: 模型计算了两次，需要优化，predict函数可以不用
+                y_pred_prob = self.model(X.to(self.device))
+
                 y_true_list.extend(y.tolist())
-                y_pred_list.extend(self.predict(X))
-                if self._loss_criterion:
-                    self.model.eval()
-                    with torch.no_grad():
-                        eval_loss_sum += self._loss_criterion(self.model(X.to(self.device)), y.to(self.device))
+                y_pred_list.extend(y_pred_prob.argmax(dim=1).cpu().tolist())
+                eval_loss_sum += self._loss_criterion(y_pred_prob, y.to(self.device))
                 sample_count += y.shape[0]
 
-        mean_eval_loss = eval_loss_sum / sample_count
-        score = calculate_classification_score(y_true_list, y_pred_list, score)
+            mean_eval_loss = eval_loss_sum / sample_count
+            score = calculate_classification_score(y_true_list, y_pred_list, score)
 
-        return score, mean_eval_loss
+            return score, mean_eval_loss

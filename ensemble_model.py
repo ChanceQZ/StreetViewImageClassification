@@ -9,11 +9,11 @@
 import torch
 from torch import nn, Tensor
 from torchvision import transforms
-from base_model import Model
+from base_model import BaseModel
 from utils import check_device
 
 
-class EnsembleClassificationModel(Model):
+class EnsembleClassificationModel(BaseModel):
     def __init__(self, model_dict, device: str = "gpu"):
         self.model_dict = model_dict
         self.device = check_device(device)

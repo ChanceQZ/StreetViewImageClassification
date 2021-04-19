@@ -48,14 +48,14 @@ class BaseModel:
         if isinstance(loss_criterion, str):
             if loss_criterion.lower() == "cross_entropy":
                 self._loss_criterion = torch.nn.CrossEntropyLoss()
-            else:
-                self._loss_criterion = loss_criterion
+        else:
+            self._loss_criterion = loss_criterion
 
         if isinstance(optimizer, str):
             if optimizer.lower() == "sgd":
                 self._optimizer = optim.SGD(self.model.parameters(), lr=lr, weight_decay=0.001)
-            else:
-                self._optimizer = optimizer
+        else:
+            self._optimizer = optimizer
 
         if isinstance(scheduler, str):
             if scheduler.lower() == "cawr":

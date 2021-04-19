@@ -22,7 +22,8 @@ transform = A.Compose([
     A.Resize(IMAGE_SIZE, IMAGE_SIZE),
     A.HorizontalFlip(p=0.5),
     A.Rotate(limit=ROTATE_ANGLE, p=0.5),
-    A.GaussNoise(p=0.5)
+    A.GaussNoise(p=0.5),
+    A.ISONoise(p=0.5)
 ])
 
 
@@ -31,7 +32,7 @@ class StreetViewDataset(Dataset):
             self,
             data_path_list,
             label_list,
-            transform,
+            transform=transform,
             test_mode=False,
             TTA_mode=False,
             TTA_count=5
@@ -75,10 +76,7 @@ class StreetViewDataset(Dataset):
 def create_dataset(
         path,
         pos="positive",
-        neg="negative",
-        test_mode=False,
-        TTA_mode=False,
-        TTA_count=5
+        neg="negative"
 ):
     positive_path_list = glob.glob(os.path.join(path, pos, "*.png"))
     negative_path_list = glob.glob(os.path.join(path, neg, "*.png"))
@@ -87,10 +85,7 @@ def create_dataset(
     return StreetViewDataset(
         data_path_list,
         label_list,
-        transform,
-        test_mode=True,
-        TTA_mode=True,
-        TTA_count=TTA_count
+        transform
     )
 
 

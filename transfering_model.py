@@ -53,8 +53,8 @@ class TransferingModel(BaseModel):
     def fit(
             self,
             lr: float = 0.01,
-            batch_size: int = 16,
             optimizer: str = "sgd",
+            scheduler: str = None,
             num_epochs: int = 30,
             checkpoint_epochs: int = None,
             train_iter: Generator = None,
@@ -91,6 +91,7 @@ class TransferingModel(BaseModel):
             lr,
             loss_criterion,
             optimizer,
+            scheduler,
             num_epochs,
             checkpoint_epochs,
             model_save_path,

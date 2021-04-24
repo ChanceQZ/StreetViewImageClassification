@@ -34,12 +34,12 @@ if __name__ == "__main__":
     train_dataset = create_dataset(train_data_path)
     valid_dataset = create_dataset(valid_data_path)
 
-    train_iter = DataLoader(train_dataset, batch_size=32, shuffle=True)
-    valid_iter = DataLoader(valid_dataset, batch_size=32)
+    train_iter = DataLoader(train_dataset, batch_size=16, shuffle=True)
+    valid_iter = DataLoader(valid_dataset, batch_size=16)
 
-    model_names = ["resnet101", "resnet152", "densenet161", "densenet201"]
+    model_names = ["resnet101", "resnet152"]#, "densenet161", "densenet201"]
     optimizer = "sgd"
-    for lr in [0.01, 0.001]:
+    for lr in [0.001]:#, 0.001]:
         for model_name in model_names:
             print("============%s is training============" % model_name)
             model_save_path = os.path.join("C:/Level4Project/model", "lr_{}".format(lr), model_name)

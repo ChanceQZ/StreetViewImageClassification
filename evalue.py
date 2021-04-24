@@ -54,15 +54,15 @@ if __name__ == '__main__':
     import time
     # for config in glob.glob(r"C:\Level4Project\SuZhouTest\model_weights\ensemble_config\*.json"):
     #     print(os.path.basename(config))
-    # config = r"C:\Level4Project\SuZhouTest\model_weights\ensemble_config\多模型集成_0.01.json"
-    # with open(config) as f:
-    #     weights = json.load(f)
-    # test_data_path_list = glob.glob('data/test_total/*')
+    config = r"C:\Level4Project\model\ensemble_config.json"
+    with open(config) as f:
+        weights = json.load(f)
+    test_data_path_list = glob.glob(r'C:\StreetViewImageClassification\data\test_total\*')
     #
-    # model_dict = {name: TransferingModel(name.split("_")[0], weight).model for name, weight in weights.items()}
+    model_dict = {name: TransferingModel(name.split("_")[0], weight).model for name, weight in weights.items()}
     start = time.time()
-    # ensemble_model = EnsembleClassificationModel(model_dict)
-    base_path = "./model_weights"
-    model = TransferingModel("resnet101", os.path.join(base_path, "epoch26_loss0.0009_trainacc0.992_testacc0.990.pth"))
-    batch_evaluation(model,["./data/validation"])
+    ensemble_model = EnsembleClassificationModel(model_dict)
+    # base_path = "./model_weights"
+    # model = TransferingModel("resnet101", os.path.join(base_path, "epoch26_loss0.0009_trainacc0.992_testacc0.990.pth"))
+    batch_evaluation(ensemble_model, test_data_path_list)
     print(time.time() - start)

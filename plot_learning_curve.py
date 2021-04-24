@@ -13,7 +13,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from utils import plot_curve
 
-weight_path = "C:/Level4Project/SuZhouTest/model_weights/cosineannealing/lr_0.01/densenet161"
+weight_path = "C:/Level4Project/model/lr_0.01/resnet101"
 weight_list = os.listdir(weight_path)
 weight_list.sort(key=lambda x: int(x.split("_")[0][5:]))
 train_acc_list, test_acc_list = [], []

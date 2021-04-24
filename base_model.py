@@ -11,6 +11,7 @@ import time
 import torch
 from scipy import stats
 import numpy as np
+import tqdm
 from torch import nn, optim
 from typing import Generator, Union
 from torchvision import transforms
@@ -72,7 +73,7 @@ class BaseModel:
             sample_count, batch_count, train_loss_sum, train_acc_sum, start = 0, 0, 0.0, 0.0, time.time()
             self.model.train()
 
-            for idx, (X, y) in enumerate(train_iter):
+            for idx, (X, y) in tqdm.tqdm(enumerate(train_iter)):
                 X = X.to(self.device)
                 y = y.to(self.device)
 
